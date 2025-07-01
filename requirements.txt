@@ -1,7 +1,7 @@
 llama-index>=0.10.20
 openai>=1.0.0
-streamlit
+python-dotenv
 streamlit
 llama-index
 openai
-python-dotenv
+docx2txt
