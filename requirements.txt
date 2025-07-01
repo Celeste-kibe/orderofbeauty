@@ -1,3 +1,6 @@
+llama-index>=0.10.20
+openai>=1.0.0
+streamlit
 streamlit
 llama-index
 openai
