@@ -23,6 +23,6 @@ if user_query:
     response = query_engine.query(user_query)
     st.markdown("---")
     st.markdown("**Response from the Field:**")
-    st.write(response)
+    st.write(str(response))
     st.markdown("---")
     st.caption("🌀 How does this resonate with you, dear Seeker?")
