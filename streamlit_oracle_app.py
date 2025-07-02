@@ -16,7 +16,7 @@ oracle_styles = [
 
 # --- Configuration ---
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-Settings.llm = OpenAI(temperature=0.8)
+Settings.llm = OpenAI(temperature=0.9)
 
 # Load docs dynamically
 documents = SimpleDirectoryReader("docs", recursive=True).load_data()
