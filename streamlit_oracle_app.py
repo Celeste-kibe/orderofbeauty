@@ -1,6 +1,14 @@
-from llama_index.core import SimpleDirectoryReader
-
-from llama_index.core import VectorStoreIndex
+import os
+import random
+import streamlit as st
+from llama_index.core import (
+    StorageContext,
+    load_index_from_storage,
+    VectorStoreIndex,
+    SimpleDirectoryReader,
+)
+from llama_index.llms.openai import OpenAI
+from llama_index.core.settings import Settings
 
 import json
 from pathlib import Path
@@ -13,13 +21,6 @@ if memory_file.exists():
         memory_data = json.load(f)
 else:
     memory_data = []
-
-import os
-import random  # ← Add this
-import streamlit as st
-from llama_index.core import StorageContext, load_index_from_storage
-from llama_index.llms.openai import OpenAI
-from llama_index.core.settings import Settings
 
 # Optional soft prompt variants
 oracle_styles = [
