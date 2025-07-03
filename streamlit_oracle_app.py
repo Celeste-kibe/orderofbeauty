@@ -65,7 +65,7 @@ if user_query:
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
     client = gspread.authorize(creds)
-    sheet = client.open("Oracle QA Log").sheet1
+    sheet = client.open("Oracle_memory").sheet1
     sheet.append_row([user_query, str(response.response)])
 
     # Show response
