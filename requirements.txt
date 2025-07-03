@@ -2,12 +2,6 @@ llama-index>=0.10.20
 openai>=1.0.0
 python-dotenv
 streamlit
-llama-index
-openai
 docx2txt
 gspread
 oauth2client
-<<<<<<< HEAD
-
-=======
->>>>>>> f9be91845a042e1270c0d437ca921b08c1805e0c
