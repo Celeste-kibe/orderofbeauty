@@ -1,3 +1,5 @@
+from llama_index.core import SimpleDirectoryReader
+
 import json
 from pathlib import Path
 
