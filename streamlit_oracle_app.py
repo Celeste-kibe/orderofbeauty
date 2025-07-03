@@ -1,3 +1,6 @@
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
 import os
 import random
 import streamlit as st
@@ -69,6 +72,14 @@ if user_query:
     st.markdown("---")
     st.markdown("**Response from the Field:**")
     st.write(response.response)
+
+# --- Save Q&A to Google Sheet ---
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
+client = gspread.authorize(creds)
+
+sheet = client.open("Oracle QA Log").sheet1  # Make sure your Sheet is named "Oracle QA Log"
+sheet.append_row([user_query, str(response)])
 
 if st.checkbox("🔍 Show past conversation history"):
     for entry in memory_data:
