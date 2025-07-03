@@ -1,3 +1,15 @@
+import json
+from pathlib import Path
+
+memory_file = Path("memory.json")
+
+# Load existing memory
+if memory_file.exists():
+    with open(memory_file, "r") as f:
+        memory_data = json.load(f)
+else:
+    memory_data = []
+
 import os
 import random  # ← Add this
 import streamlit as st
@@ -35,4 +47,27 @@ if user_query:
     styled_query = f"{user_query}\n\n{flavor}"
 
     response = query_engine.query(styled_query)
+
+if user_query:
+    response = query_engine.query(user_query)
+    
+    # Save to memory
+    memory_data.append({
+        "user_query": user_query,
+        "oracle_response": str(response)
+    })
+
+    with open(memory_file, "w") as f:
+        json.dump(memory_data, f, indent=2)
+
+    # Show response
+    st.markdown("---")
+    st.markdown("**Response from the Field:**")
+    st.write(response)
+
+if st.checkbox("🔍 Show past conversation history"):
+    for entry in memory_data:
+        st.markdown(f"**You:** {entry['user_query']}")
+        st.markdown(f"**Oracle:** {entry['oracle_response']}")
+        st.markdown("---")
 
