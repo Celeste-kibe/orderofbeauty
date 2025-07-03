@@ -5,3 +5,5 @@ streamlit
 llama-index
 openai
 docx2txt
+gspread
+oauth2client
