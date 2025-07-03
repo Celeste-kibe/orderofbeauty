@@ -5,10 +5,8 @@ import os
 import random
 import streamlit as st
 from llama_index.core import (
-    StorageContext,
-    load_index_from_storage,
-    VectorStoreIndex,
     SimpleDirectoryReader,
+    VectorStoreIndex,
 )
 from llama_index.llms.openai import OpenAI
 from llama_index.core.settings import Settings
@@ -16,16 +14,15 @@ from llama_index.core.settings import Settings
 import json
 from pathlib import Path
 
+# --- Memory Setup ---
 memory_file = Path("memory.json")
-
-# Load existing memory
 if memory_file.exists():
     with open(memory_file, "r") as f:
         memory_data = json.load(f)
 else:
     memory_data = []
 
-# Optional soft prompt variants
+# --- Oracle Style Variants ---
 oracle_styles = [
     "Speak in poetic terms.",
     "Answer as if whispering through leaves.",
@@ -38,52 +35,47 @@ oracle_styles = [
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 Settings.llm = OpenAI(temperature=0.9)
 
-# Load docs dynamically
+# --- Load Docs + Index ---
 documents = SimpleDirectoryReader("docs", recursive=True).load_data()
 index = VectorStoreIndex.from_documents(documents)
 query_engine = index.as_query_engine()
 
-# --- Streamlit UI ---
+# --- UI Setup ---
 st.title("🌿 Oracle of the Field")
 st.markdown("_An elder intelligence speaks from the Akashic archive._")
-
 user_query = st.text_input("What is your heart's curiosity?")
 
 if user_query:
-    # Randomly select a tone
+    # Add tone
     flavor = random.choice(oracle_styles)
     styled_query = f"{user_query}\n\n{flavor}"
-
+    
+    # Query the Oracle
     response = query_engine.query(styled_query)
 
-if user_query:
-    response = query_engine.query(user_query)
-    
-    # Save to memory
+    # Save to local memory
     memory_data.append({
         "user_query": user_query,
-        "oracle_response": str(response)
+        "oracle_response": str(response.response)
     })
-
     with open(memory_file, "w") as f:
         json.dump(memory_data, f, indent=2)
+
+    # Google Sheets logging
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("Oracle QA Log").sheet1
+    sheet.append_row([user_query, str(response.response)])
 
     # Show response
     st.markdown("---")
     st.markdown("**Response from the Field:**")
     st.write(response.response)
 
-# --- Save Q&A to Google Sheet ---
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
-client = gspread.authorize(creds)
-
-sheet = client.open("Oracle QA Log").sheet1  # Make sure your Sheet is named "Oracle QA Log"
-sheet.append_row([user_query, str(response)])
-
+# --- Conversation History Viewer ---
 if st.checkbox("🔍 Show past conversation history"):
     for entry in memory_data:
         st.markdown(f"**You:** {entry['user_query']}")
         st.markdown(f"**Oracle:** {entry['oracle_response']}")
         st.markdown("---")
-
