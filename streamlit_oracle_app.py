@@ -68,7 +68,7 @@ if user_query:
     # Show response
     st.markdown("---")
     st.markdown("**Response from the Field:**")
-    st.write(response)
+    st.write(response.response)
 
 if st.checkbox("🔍 Show past conversation history"):
     for entry in memory_data:
