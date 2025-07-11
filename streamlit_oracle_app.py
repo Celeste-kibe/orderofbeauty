@@ -57,7 +57,7 @@ fixed_keywords = {
 }
 
 # Dynamic image finder
-def find_image(keyword, folder="docs/Images"):
+def find_image(keyword, folder="docs/images"):
     keyword = keyword.lower()
     for filepath in glob.glob(f"{folder}/**/*", recursive=True):
         filename = os.path.basename(filepath).lower()
