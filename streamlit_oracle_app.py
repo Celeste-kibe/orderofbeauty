@@ -116,7 +116,7 @@ if any(word in user_query.lower() for word in ["image", "show", "picture", "visu
     sheet.append_row([user_query, str(response.response)])
 
 # TEMP: sanity check
-# st.image("docs/images/whales/whale_rurutu_2.png", caption="Test image")
+st.image("docs/images/whale_rurutu_2.png", caption="Hardcoded test image", use_column_width=True)
 
 # --- CONVERSATION HISTORY ---
 if st.checkbox("🔍 Show past conversation history"):
