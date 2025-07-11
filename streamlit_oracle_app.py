@@ -57,7 +57,7 @@ fixed_keywords = {
 }
 
 # Dynamic image finder
-def find_image(keyword, folder="docs/images"):
+def find_image(keyword, folder="docs/Images"):
     keyword = keyword.lower()
     for filepath in glob.glob(f"{folder}/**/*", recursive=True):
         filename = os.path.basename(filepath).lower()
@@ -96,16 +96,17 @@ if user_query:
         st.image(Image.open(fixed_image_path), caption="📸 Oracle Vision", use_column_width=True)
 
     # Attempt dynamic image match if user asks
-    if "image" in user_query.lower() or "show me" in user_query.lower():
-        possible_keywords = [
-            w for w in user_query.lower().split()
-            if len(w) > 3 and w not in ["image", "show", "please", "me", "the"]
-        ]
-        for kw in possible_keywords:
-            img_path = find_image(kw)
-            if img_path:
-                st.image(img_path, caption=f"📸 Image for: {kw}", use_column_width=True)
-                break
+   if any(word in user_query.lower() for word in ["image", "show", "picture", "visual", "see"]):
+    words = user_query.lower().split()
+    possible_keywords = [w for w in words if len(w) > 3 and w not in ["image", "show", "please", "me", "the", "a", "an"]]
+
+    for kw in possible_keywords:
+        img_path = find_image(kw)
+        if img_path:
+            st.markdown("---")
+            st.image(img_path, caption=f"📸 Image for: {kw}", use_column_width=True)
+            break
+
 
     # Log to Google Sheets
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
