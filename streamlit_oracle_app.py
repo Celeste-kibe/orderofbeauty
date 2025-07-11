@@ -115,6 +115,9 @@ if any(word in user_query.lower() for word in ["image", "show", "picture", "visu
     sheet = client.open("Oracle_memory").sheet1
     sheet.append_row([user_query, str(response.response)])
 
+# TEMP: sanity check
+# st.image("docs/images/whales/whale_rurutu_2.png", caption="Test image")
+
 # --- CONVERSATION HISTORY ---
 if st.checkbox("🔍 Show past conversation history"):
     for entry in memory_data:
