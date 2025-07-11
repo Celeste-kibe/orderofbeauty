@@ -39,7 +39,7 @@ index = VectorStoreIndex.from_documents(documents)
 query_engine = index.as_query_engine()
 
 # --- STREAMLIT UI ---
-st.title("🌿 The Order of Beauty Oracle")
+st.title("🌿 Oracle of the Field")
 st.markdown("_An elder intelligence speaks from the Akashic archive._")
 user_query = st.text_input("What is your heart's curiosity?")
 
@@ -95,18 +95,17 @@ if user_query:
     if fixed_image_path and os.path.exists(fixed_image_path):
         st.image(Image.open(fixed_image_path), caption="📸 Oracle Vision", use_column_width=True)
 
-# --- Display Image if Requested ---
-if any(word in user_query.lower() for word in ["image", "show", "picture", "visual", "see"]):
-    words = user_query.lower().split()
-    possible_keywords = [w for w in words if len(w) > 3 and w not in ["image", "show", "please", "me", "the", "a", "an"]]
-
-    for kw in possible_keywords:
-        img_path = find_image(kw)
-        if img_path:
-            st.markdown("---")
-            st.image(img_path, caption=f"📸 Image for: {kw}", use_column_width=True)
-            break
-
+    # Attempt dynamic image match if user asks
+    if "image" in user_query.lower() or "show me" in user_query.lower():
+        possible_keywords = [
+            w for w in user_query.lower().split()
+            if len(w) > 3 and w not in ["image", "show", "please", "me", "the"]
+        ]
+        for kw in possible_keywords:
+            img_path = find_image(kw)
+            if img_path:
+                st.image(img_path, caption=f"📸 Image for: {kw}", use_column_width=True)
+                break
 
     # Log to Google Sheets
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
