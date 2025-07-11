@@ -95,8 +95,8 @@ if user_query:
     if fixed_image_path and os.path.exists(fixed_image_path):
         st.image(Image.open(fixed_image_path), caption="📸 Oracle Vision", use_column_width=True)
 
-    # Attempt dynamic image match if user asks
-   if any(word in user_query.lower() for word in ["image", "show", "picture", "visual", "see"]):
+# --- Display Image if Requested ---
+if any(word in user_query.lower() for word in ["image", "show", "picture", "visual", "see"]):
     words = user_query.lower().split()
     possible_keywords = [w for w in words if len(w) > 3 and w not in ["image", "show", "please", "me", "the", "a", "an"]]
 
