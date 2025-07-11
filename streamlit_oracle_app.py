@@ -43,6 +43,8 @@ st.title("🌿 Oracle of the Field")
 st.markdown("_An elder intelligence speaks from the Akashic archive._")
 user_query = st.text_input("What is your heart's curiosity?")
 
+st.image("docs/images/whale_rurutu_2.png", caption="Test image", use_column_width=True)
+
 # --- IMAGE HANDLERS ---
 # Fixed keyword-based matching
 fixed_keywords = {
