@@ -1,18 +1,19 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
 import os
 import random
+import json
+from pathlib import Path
 import streamlit as st
+
 from llama_index.core import (
     SimpleDirectoryReader,
     VectorStoreIndex,
+    StorageContext,
+    load_index_from_storage,
 )
 from llama_index.llms.openai import OpenAI
 from llama_index.core.settings import Settings
-
-import json
-from pathlib import Path
 
 # --- Memory Setup ---
 memory_file = Path("memory.json")
@@ -36,19 +37,16 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 Settings.llm = OpenAI(temperature=0.9)
 
 # --- Load Docs + Index ---
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
-import os
-
-# Check if storage directory exists
 if os.path.exists("storage"):
-    # Load index from disk
     storage_context = StorageContext.from_defaults(persist_dir="storage")
     index = load_index_from_storage(storage_context)
 else:
-    # Load and index documents
     documents = SimpleDirectoryReader("docs", recursive=True).load_data()
     index = VectorStoreIndex.from_documents(documents)
     index.storage_context.persist(persist_dir="storage")
+
+# ✅ Define the query engine
+query_engine = index.as_query_engine()
 
 # --- UI Setup ---
 st.title("🌿 Oracle of the Field")
