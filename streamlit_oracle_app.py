@@ -43,7 +43,7 @@ if os.path.exists("storage"):
 else:
     documents = SimpleDirectoryReader("docs", recursive=True, required_exts=[".txt", ".pdf"]).load_data()
     index = VectorStoreIndex.from_documents(documents)
-    index.storage_context.persist(persist_dir="storage")
+    index.storage_context.persist(persist_dir="storage2")
 
 # ✅ Define the query engine
 query_engine = index.as_query_engine()
