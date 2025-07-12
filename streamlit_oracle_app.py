@@ -39,18 +39,16 @@ Settings.llm = OpenAI(temperature=0.9)
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
 import os
 
-# Check if index already exists
-if not os.path.exists("storage"):
-    # First time: create and save index
+# Check if storage directory exists
+if os.path.exists("storage"):
+    # Load index from disk
+    storage_context = StorageContext.from_defaults(persist_dir="storage")
+    index = load_index_from_storage(storage_context)
+else:
+    # Load and index documents
     documents = SimpleDirectoryReader("docs", recursive=True).load_data()
     index = VectorStoreIndex.from_documents(documents)
     index.storage_context.persist(persist_dir="storage")
-else:
-    # Load existing index from storage
-    storage_context = StorageContext.from_defaults(persist_dir="storage")
-    index = load_index_from_storage(storage_context)
-
-query_engine = index.as_query_engine()
 
 # --- UI Setup ---
 st.title("🌿 Oracle of the Field")
