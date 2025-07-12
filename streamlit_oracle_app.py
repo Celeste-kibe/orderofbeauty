@@ -41,7 +41,7 @@ if os.path.exists("storage"):
     storage_context = StorageContext.from_defaults(persist_dir="storage")
     index = load_index_from_storage(storage_context)
 else:
-    documents = SimpleDirectoryReader("docs", recursive=True).load_data()
+    documents = SimpleDirectoryReader("docs", recursive=True, required_exts=[".txt", ".pdf"]).load_data()
     index = VectorStoreIndex.from_documents(documents)
     index.storage_context.persist(persist_dir="storage")
 
