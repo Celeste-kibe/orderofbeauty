@@ -15,6 +15,21 @@ from llama_index.core import (
 from llama_index.llms.openai import OpenAI
 from llama_index.core.settings import Settings
 
+import streamlit as st
+import time
+
+st.write("✅ App started")
+
+# add this before document loading
+st.write("📁 Loading docs...")
+
+# add this after loading docs
+st.write("✅ Docs loaded")
+
+# add this before showing the input
+st.write("🔄 Ready for input")
+
+
 # --- Memory Setup ---
 memory_file = Path("memory.json")
 if memory_file.exists():
